@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8A4C5F5A-5B71-4225-B449-064D01BA6E73}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>SplitMap</RootNamespace>
+    <AssemblyName>SplitMap</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Animal\Action\ClimbToRockAction.cs" />
+    <Compile Include="Animal\Action\EatBananaAction.cs" />
+    <Compile Include="Animal\Action\ProxyClimbToRockAction.cs" />
+    <Compile Include="Animal\Action\WalkFieldAction.cs" />
+    <Compile Include="Animal\Adapter\CrossBreeding.cs" />
+    <Compile Include="Animal\Base\BaseAction.cs" />
+    <Compile Include="Animal\Base\BaseAnimal.cs" />
+    <Compile Include="Animal\Base\BaseDescribeAction.cs" />
+    <Compile Include="Animal\Base\BaseObject.cs" />
+    <Compile Include="Animal\BridgeObject\DrawAnimal.cs" />
+    <Compile Include="Animal\BridgeObject\DrawBabyAnimal.cs" />
+    <Compile Include="Animal\Bridge\TravelMaster.cs" />
+    <Compile Include="Animal\Bridge\TravelSecurity.cs" />
+    <Compile Include="Animal\Bridge\Wanderer.cs" />
+    <Compile Include="Animal\Composite\IMapComponent.cs" />
+    <Compile Include="Animal\Composite\IMapComposite.cs" />
+    <Compile Include="Animal\Composite\MapComposite.cs" />
+    <Compile Include="Animal\Decorator\ActionDecorator.cs" />
+    <Compile Include="Animal\Decorator\BlueActionDecorator.cs" />
+    <Compile Include="Animal\Decorator\RedActionDecorator.cs" />
+    <Compile Include="Animal\Derived\ArrowSign.cs" />
+    <Compile Include="Animal\Derived\Monkey.cs" />
+    <Compile Include="Animal\Facade\ConstructMap.cs" />
+    <Compile Include="Animal\Facade\FieldMap.cs" />
+    <Compile Include="Animal\Facade\FieldWasBusyException.cs" />
+    <Compile Include="Animal\Facade\IFacade.cs" />
+    <Compile Include="Animal\Flyweight\BaseDescribeFactory.cs" />
+    <Compile Include="Animal\Information Expert\TravelExpert.cs" />
+    <Compile Include="Animal\BridgeObject\DrawAction.cs" />
+    <Compile Include="Animal\Interface\IAnimalAction.cs" />
+    <Compile Include="Animal\Interface\ICanLearnAction.cs" />
+    <Compile Include="Animal\Interface\IDoAction.cs" />
+    <Compile Include="Animal\Interface\IDrawMaster.cs" />
+    <Compile Include="Animal\Iterator\Aggregate.cs" />
+    <Compile Include="Animal\Iterator\IAggregate.cs" />
+    <Compile Include="Animal\Iterator\IIterator.cs" />
+    <Compile Include="Animal\Iterator\ObjectIterator.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Astar\Node.cs" />
+    <Compile Include="Astar\NodeState.cs" />
+    <Compile Include="Astar\PathFinder.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Astar\SearchParameters.cs" />
+    <Compile Include="StaTaskScheduler.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Picture\Action\banana.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="John.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Animal\Monkey\Happymonkey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Animal\Monkey\Learningmonkey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Animal\Monkey\Monkey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Animal\Monkey\MonkeyClimb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Action\rock.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Animal\Monkey\Sadmonkey.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Arrow\Down.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Arrow\Left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Arrow\Right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Arrow\Up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\Banana.bmp" />
+    <Content Include="SadLemur.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Picture\Action\safetyRock.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

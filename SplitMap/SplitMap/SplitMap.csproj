@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8A4C5F5A-5B71-4225-B449-064D01BA6E73}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>SplitMap</RootNamespace>
     <AssemblyName>SplitMap</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,14 +57,13 @@
     <Compile Include="Animal\Base\BaseAnimal.cs" />
     <Compile Include="Animal\Base\BaseDescribeAction.cs" />
     <Compile Include="Animal\Base\BaseObject.cs" />
-    <Compile Include="Animal\BridgeObject\DrawAnimal.cs" />
-    <Compile Include="Animal\BridgeObject\DrawBabyAnimal.cs" />
+    <Compile Include="Animal\BridgeDraw\ConsoleGameManager.cs" />
+    <Compile Include="Animal\BridgeDraw\Containers.cs" />
+    <Compile Include="Animal\BridgeDraw\DrawConsole.cs" />
     <Compile Include="Animal\Bridge\TravelMaster.cs" />
     <Compile Include="Animal\Bridge\TravelSecurity.cs" />
     <Compile Include="Animal\Bridge\Wanderer.cs" />
-    <Compile Include="Animal\Composite\IMapComponent.cs" />
-    <Compile Include="Animal\Composite\IMapComposite.cs" />
-    <Compile Include="Animal\Composite\MapComposite.cs" />
+    <Compile Include="Animal\Composite\ZooComposite.cs" />
     <Compile Include="Animal\Decorator\ActionDecorator.cs" />
     <Compile Include="Animal\Decorator\BlueActionDecorator.cs" />
     <Compile Include="Animal\Decorator\RedActionDecorator.cs" />
@@ -73,7 +75,6 @@
     <Compile Include="Animal\Facade\IFacade.cs" />
     <Compile Include="Animal\Flyweight\BaseDescribeFactory.cs" />
     <Compile Include="Animal\Information Expert\TravelExpert.cs" />
-    <Compile Include="Animal\BridgeObject\DrawAction.cs" />
     <Compile Include="Animal\Interface\IAnimalAction.cs" />
     <Compile Include="Animal\Interface\ICanLearnAction.cs" />
     <Compile Include="Animal\Interface\IDoAction.cs" />

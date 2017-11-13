@@ -135,9 +135,9 @@ namespace SplitMap
                 var result = Animal.MakeAction(action);
                 if (!node.IsWalkable)
                 {
-                    if ((action as BaseAction).baseDescribeAction.GetNameAction == "Field"
-                        || (action as BaseAction).baseDescribeAction.GetNameAction == "Banana")
-                        continue;
+                    //if ((action as BaseAction).baseDescribeAction.GetNameAction == "Field"
+                    //    || (action as BaseAction).baseDescribeAction.GetNameAction == "Banana")
+                    //    continue;
                     if (!result)
                         continue;
                 }

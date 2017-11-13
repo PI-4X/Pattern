@@ -1,5 +1,6 @@
-﻿using SplitMap.Animal.Composite;
-using SplitMap.Animal.Interface;
+﻿using SplitMap.Animal.Bridge;
+using SplitMap.Animal.Facade;
+using SplitMap.Animal.Information_Expert;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,18 +12,18 @@ namespace SplitMap.Animal.Base
     public abstract class BaseAnimal : BaseObject
     {
         #region Protected properties
-        protected Bitmap Sprite { get; set; }
-        public virtual Bitmap GetSprite => Sprite;
+        public Bitmap Sprite { get;  set; }
+        public TravelExpert travelExpert = new TravelExpert(new Wanderer());
         protected virtual StateAnimalEmotion State { get;  set; } = StateAnimalEmotion.Typical;
-        public virtual StateAnimalEmotion GetState => State;
-        protected abstract void ChangeEmotionalState();       
+        protected abstract void ChangeBitmap();
+        public Point ConsolePoint { get; set; }
         #endregion
         #region Protected field
         protected ConcurrentDictionary<Type, string> SetAction;
-        public ConcurrentDictionary<string, string> AnimalCharacteristics { get; private set; }
+        protected ConcurrentDictionary<string, string> AnimalCharacteristics { get; set; }
         #endregion
         #region  Constructor
-        public BaseAnimal(IDrawMaster drawMaster, int _x = 0, int _y = 0, int _size = 50) : base(drawMaster,_x, _y, _size)
+        public BaseAnimal(int _size = 50) : base(_size)
         {
             SetAction = new ConcurrentDictionary<Type, string>();
             AnimalCharacteristics = new ConcurrentDictionary<string, string>();
@@ -38,18 +39,38 @@ namespace SplitMap.Animal.Base
             });
             await task;
         }
-        public override void DestroyObject()
+        public virtual  void AddCharacteristicSync(string type, string _characteristic)
         {
-            this.drawMaster.DestroyObject(this.pictureBox);
+            AnimalCharacteristics[type] = _characteristic;           
         }
-        public override void DrawAbilities()
+
+
+
+        public virtual IEnumerable<KeyValuePair<string,string>> GeneratorCharacteristics()
         {
-            this.drawMaster.DrawAbilities(this.pictureBox, this.toolTip, this);
+            foreach (var e in AnimalCharacteristics)
+            {
+                yield return e;
+            }
         }
-        public override void DrawObject()
+        public virtual IEnumerable<string> GeneratorAction()
         {
-            this.drawMaster.DrawObject(this.pictureBox, this);
+            foreach (var e in SetAction)
+            {
+                yield return e.Value;
+            }
         }
+
+        public void DoStep(KindStep kindStep, List<FieldMap> PictureControls)
+        {
+            travelExpert.DoStep(this, PictureControls[this.IndexBlock], PictureControls, kindStep);
+        }
+        public void DoStep(KindStep kindStep)
+        {
+            //travelExpert.DoStep(this, kindStep);
+        }
+
+
         #endregion
     }
     public enum StateAnimalEmotion
@@ -59,7 +80,7 @@ namespace SplitMap.Animal.Base
         Ill = 2,
         Moving = 3,
         Happy = 4,
-        Learning = 5,      
+        Learning = 5,
         Typical = 6,
     }
 }

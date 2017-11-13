@@ -11,7 +11,7 @@ namespace SplitMap.Animal.Decorator
     public abstract class ActionDecorator : BaseAction
     {
         protected BaseAction baseAction;
-        public ActionDecorator(Color color, double amount, BaseAction _baseAction): base(_baseAction.GetMaster)
+        public ActionDecorator(Color color, double amount, BaseAction _baseAction): base()
         {
             this.baseAction = _baseAction;
             baseAction.pictureBox.BackColor = Blend(color, amount);

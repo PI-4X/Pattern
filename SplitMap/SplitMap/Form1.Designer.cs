@@ -41,7 +41,7 @@
             this.buttonRight = new System.Windows.Forms.Button();
             this.buttonActionDecorator = new System.Windows.Forms.Button();
             this.buttonCreateAction = new System.Windows.Forms.Button();
-            this.buttonDrawPath = new System.Windows.Forms.Button();
+            this.buttonAddComponent = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -171,22 +171,22 @@
             this.buttonCreateAction.UseVisualStyleBackColor = true;
             this.buttonCreateAction.Click += new System.EventHandler(this.buttonCreateAction_Click);
             // 
-            // buttonDrawPath
+            // buttonAddComponent
             // 
-            this.buttonDrawPath.Location = new System.Drawing.Point(1018, 190);
-            this.buttonDrawPath.Name = "buttonDrawPath";
-            this.buttonDrawPath.Size = new System.Drawing.Size(75, 44);
-            this.buttonDrawPath.TabIndex = 14;
-            this.buttonDrawPath.Text = "Draw path";
-            this.buttonDrawPath.UseVisualStyleBackColor = true;
-            this.buttonDrawPath.Click += new System.EventHandler(this.buttonDrawPath_Click);
+            this.buttonAddComponent.Location = new System.Drawing.Point(1018, 189);
+            this.buttonAddComponent.Name = "buttonAddComponent";
+            this.buttonAddComponent.Size = new System.Drawing.Size(75, 48);
+            this.buttonAddComponent.TabIndex = 15;
+            this.buttonAddComponent.Text = "Add component";
+            this.buttonAddComponent.UseVisualStyleBackColor = true;
+            this.buttonAddComponent.Click += new System.EventHandler(this.buttonAddComponent_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1176, 570);
-            this.Controls.Add(this.buttonDrawPath);
+            this.Controls.Add(this.buttonAddComponent);
             this.Controls.Add(this.buttonCreateAction);
             this.Controls.Add(this.buttonActionDecorator);
             this.Controls.Add(this.buttonRight);
@@ -224,7 +224,7 @@
         private System.Windows.Forms.Button buttonRight;
         private System.Windows.Forms.Button buttonActionDecorator;
         private System.Windows.Forms.Button buttonCreateAction;
-        private System.Windows.Forms.Button buttonDrawPath;
+        private System.Windows.Forms.Button buttonAddComponent;
     }
 }
 

@@ -11,6 +11,7 @@ namespace SplitMap.Animal.Base
 {
     public abstract class BaseAction : BaseObject, IComparable, IAnimalAction
     {
+        public Point ConsolePoint { get; set; }
         public virtual BaseDescribeAction baseDescribeAction { get; set; }
         public int CompareTo(object obj)
         {
@@ -21,22 +22,12 @@ namespace SplitMap.Animal.Base
         }
         public abstract Task<bool> StartActionAsync();
         public abstract bool StartAction();
-        public BaseAction(IDrawMaster drawMaster, int _x = 0, int _y = 0, int _size = 45) : base(drawMaster,_x, _y,_size)
-        {
-        }
+        public BaseAction(int _size = 45) : base(_size) { }
         public override Point Coordinate { get => new Point(pictureBox.Location.X / 50, pictureBox.Location.Y / 50); set => base.Coordinate = value; }
-
-        public override void DestroyObject()
+        public Point ExternalCoordinate { get; set; } = new Point(0, 0);
+        public virtual void AddAction(BaseAction baseAction)
         {
-            this.drawMaster.DestroyObject(this.pictureBox);
-        }
-        public override void DrawAbilities()
-        {          
-            this.drawMaster.DrawAbilities(this.pictureBox, this.toolTip, this);
-        }
-        public override void DrawObject()
-        {
-            this.drawMaster.DrawObject(this.pictureBox, this);
+            throw new NotImplementedException();
         }
 
     }

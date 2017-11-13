@@ -10,8 +10,8 @@ namespace SplitMap.Animal.Interface
 {
     public interface IDrawMaster
     {
-        void DrawAbilities(PictureBox control, ToolTip toolTip, BaseObject baseObject);
-        void DrawObject(PictureBox control, BaseObject baseObject);
-        void DestroyObject(PictureBox control);
+        void DrawAbilities(BaseObject baseObject);
+        void DrawObject(BaseObject baseObject);
+        void DestroyObject(BaseObject baseObject);
     }
 }

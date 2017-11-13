@@ -9,41 +9,31 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SplitMap.Animal.Facade;
+using SplitMap.Animal.BridgeDraw;
 
 namespace SplitMap.Animal.Derived
 {
     public class Monkey : BaseAnimal, ICanLearnAction, IDoAction
     {
-        #region Private members
-        private ConcurrentDictionary<Type, string> SetKnowAction;
-        #endregion
+        private IDrawMaster drawMaster = new DrawConsole();
         #region Constructor
-        public Monkey(IDrawMaster drawMaster, int _x = 0, int _y = 0, int _size = 50) : base(drawMaster,_x, _y, _size)
+        public Monkey(int _size = 50) : base(_size)
         {
 
             this.Sprite = new Bitmap(@"Picture/Animal/Monkey/Monkey.png");
-            SetKnowAction = new ConcurrentDictionary<Type, string>();
-            Sprite.MakeTransparent();
+            SetAction = new ConcurrentDictionary<Type, string>();
 
-        } 
-        #endregion
-        #region Private method
-        private IEnumerable<string> GetAllKnowAction()
+        }
+        public Monkey(IDrawMaster _drawMaster, int _size = 50) : base(_size)
         {
-            foreach (var e in SetKnowAction)
-            {
-                yield return e.Value;
-            }
+            this.Sprite = new Bitmap(@"Picture/Animal/Monkey/Monkey.png");
+            SetAction = new ConcurrentDictionary<Type, string>();
+            drawMaster = _drawMaster;
         }
         #endregion
-
-        public override void DrawCompositeObject()
-        {
-            drawMaster.DrawObject(pictureBox, this);
-        }
-
         #region Base class                  
-        protected override void ChangeEmotionalState()
+        protected override void ChangeBitmap()
         {
             switch (State)
             {
@@ -60,7 +50,6 @@ namespace SplitMap.Animal.Derived
                 case StateAnimalEmotion.Learning:
                     {
                         Sprite = new Bitmap(@"Picture/Animal/Monkey/Learningmonkey.png");
-                        DrawObject();
                         break;
                     }
                 case StateAnimalEmotion.Typical:
@@ -77,36 +66,39 @@ namespace SplitMap.Animal.Derived
         }
         #endregion
         #region Implements IDrawMaster
-        //public override void DestroyObject()
-        //{
-        //    pictureBox.Image = null;
-        //}
-        //public override void DrawAbilities()
-        //{
-        //    toolTip.RemoveAll();
-        //    string info = string.Empty;
-        //    foreach (var item in AnimalCharacteristics)
-        //        info += $"{item.Key} - {item.Value}\n";
-        //    foreach (var item in GetAllKnowAction())
-        //        info += $"I can {item}\n";
-        //    info += State;
-        //    toolTip.SetToolTip(pictureBox, info);
-        //}
-        //public override void DrawObject()
-        //{
-        //    toolTip.RemoveAll();
-        //    pictureBox.Image = new Bitmap(Sprite, new Size(SizeBitmap, SizeBitmap));
-        //}
+        public override void DestroyObject()
+        {
+            drawMaster.DestroyObject(this);
+            pictureBox.Image = null;
+        }
+        public override void DrawAbilities()
+        {
+            drawMaster.DrawAbilities(this);
+            toolTip.RemoveAll();
+            string info = string.Empty;
+            foreach (var item in AnimalCharacteristics)
+                info += $"{item.Key} - {item.Value}\n";
+            foreach (var item in GeneratorAction())
+                info += $"I can {item}\n";
+            info += State;
+            toolTip.SetToolTip(pictureBox, info);
+        }
+        public override void DrawObject()
+        {
+            drawMaster.DrawObject(this);
+            //toolTip.RemoveAll();
+           // pictureBox.Image = new Bitmap(Sprite, new Size(SizeBitmap, SizeBitmap));
+        }
         #endregion
         #region Implements ICanLearnAction
         public async Task<bool> LearningActionAsync(Type _actionType, string name)
         {
             var task = Task.Factory.StartNew(() =>
             {
-                var contains = SetKnowAction.ContainsKey(_actionType);
+                var contains = SetAction.ContainsKey(_actionType);
                 if (!contains)
                 {
-                    SetKnowAction[_actionType] = name;
+                    SetAction[_actionType] = name;
 
                 }
                 return contains;
@@ -115,10 +107,10 @@ namespace SplitMap.Animal.Derived
         }
         public bool LearningAction(Type _actionType, string name)
         {
-            var contains = SetKnowAction.ContainsKey(_actionType);
+            var contains = SetAction.ContainsKey(_actionType);
             if (!contains)
             {
-                SetKnowAction[_actionType] = name;
+                SetAction[_actionType] = name;
 
 
             }
@@ -132,7 +124,7 @@ namespace SplitMap.Animal.Derived
             if (actionType == typeof(CrossBreeding))
                 return true;
            
-                if (SetKnowAction.ContainsKey(actionType))
+                if (SetAction.ContainsKey(actionType))
                 {
                     var result = await _action.StartActionAsync();
                     if (result)
@@ -140,12 +132,12 @@ namespace SplitMap.Animal.Derived
                     else
                         State = StateAnimalEmotion.Sad;
 
-                    ChangeEmotionalState();
+                    ChangeBitmap();
                     return result;
                 }
             
             State = StateAnimalEmotion.Learning;
-            ChangeEmotionalState();
+            ChangeBitmap();
             return false;
         }
         public bool MakeAction(IAnimalAction _action)
@@ -155,7 +147,7 @@ namespace SplitMap.Animal.Derived
             if (actionType == typeof(CrossBreeding))
                 return true;
            
-                if (SetKnowAction.ContainsKey(actionType))
+                if (SetAction.ContainsKey(actionType))
                 {
                     var result = _action.StartAction();
                     if (result)
@@ -163,15 +155,19 @@ namespace SplitMap.Animal.Derived
                     else
                         State = StateAnimalEmotion.Sad;
 
-                    ChangeEmotionalState();
+                    ChangeBitmap();
                     return result;
                 }
 
             
             State = StateAnimalEmotion.Learning;
-            ChangeEmotionalState();
+            ChangeBitmap();
             return false;
         }
+
+    
+
+
         #endregion
     }
 }

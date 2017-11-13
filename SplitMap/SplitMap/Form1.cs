@@ -1,16 +1,19 @@
 ﻿using SplitMap.Animal.Action;
 using SplitMap.Animal.Base;
-using SplitMap.Animal.Bridge;
-using SplitMap.Animal.BridgeObject;
+using SplitMap.Animal.BridgeDraw;
 using SplitMap.Animal.Composite;
 using SplitMap.Animal.Decorator;
+using SplitMap.Animal.Derived;
 using SplitMap.Animal.Facade;
-using SplitMap.Animal.Information_Expert;
+using SplitMap.Animal.Flyweight;
 using SplitMap.Animal.Interface;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,7 +22,7 @@ namespace SplitMap
 {
     public partial class Form1 : Form
     {
-        TravelExpert travelExpert;
+
         List<BaseAnimal> Zoo;
         object locker;
         List<FieldMap> PictureControls;
@@ -30,20 +33,20 @@ namespace SplitMap
         WindowsMediaPlayer player = new WindowsMediaPlayer();
         Color PreviosColor = Color.Transparent;
         int indexBar = 0;
-        IMapComposite MainGroup;
+        BaseAction MainGroup;
         ConstructMap constructMap;
         Random RandomAction;
-        IDrawMaster drawActionMaster;
+
         public Form1()
         {
             InitializeComponent();
-            player.URL = "John.mp3";
-            player.controls.play();
+            //player.URL = "John.mp3";
+            //player.controls.play();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
         {
-            travelExpert = new TravelExpert(new Wanderer());
+
             RandomAction = new Random();
             locker = new object();
             TokenSource = new CancellationTokenSource();
@@ -51,105 +54,107 @@ namespace SplitMap
             Context = TaskScheduler.FromCurrentSynchronizationContext();
             Zoo = new List<BaseAnimal>();
             list = new List<AstarParamether>();
+
             PictureControls = new List<FieldMap>();
             constructMap = new ConstructMap(PictureControls);
-            MainGroup = new MapComposite();
-            drawActionMaster = new DrawAction();
+
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-            foreach (var item in MainGroup.Generator())
-            {
-                var animal = (item as BaseAnimal);
-                var sp = new SearchParameters(new Point(animal.Coordinate.Y, animal.Coordinate.X), new Point(7, 15));
-                list.Add(new AstarParamether() { searchParameters = sp, Token = Token, StartCoordinate = animal.Coordinate, Animal = animal, Path = new List<Point>() });
-            }
 
-            #region Parallel          
 
-            Parallel.ForEach(list, item =>
-            {
-                Astar(item);
-            });
+            //foreach (var item in MainGroup.Generator())
+            //{
+            //    var animal = (item as BaseAnimal);
+            //    var sp = new SearchParameters(new Point(animal.Coordinate.Y, animal.Coordinate.X), new Point(7, 15));
+            //    list.Add(new AstarParamether() { searchParameters = sp, Token = Token, StartCoordinate = animal.Coordinate, Animal = animal, Path = new List<Point>() });
+            //}
 
-            #endregion
+            //#region Parallel          
+
+            //Parallel.ForEach(list, item =>
+            //{
+            //    Astar(item);
+            //});
+
+            //#endregion
 
 
 
         }
 
 
-        public Task Astar(AstarParamether paramether)
-        {
-            return Task.Factory.StartNew(async () =>
-            {
-                List<Point> path = new List<Point>();
-                lock (locker)
-                {
+        //public Task Astar(AstarParamether paramether)
+        //{
+        //    return Task.Factory.StartNew(async () =>
+        //    {
+        //        List<Point> path = new List<Point>();
+        //        lock (locker)
+        //        {
 
-                    PathFinder pathFinder = new PathFinder(paramether.searchParameters, paramether.Animal);
-                    path = new List<Point>();
-                    path = pathFinder.FindPath();
-                    paramether.searchParameters.UpdateNode(path[0].X, path[0].Y, false);
-                }
-                if (path.Count == 1)
-                {
-                    await DrawAnimal(path[0], paramether.StartCoordinate, paramether.Animal);
-                    lock (locker)
-                    {
-                        var bananas = constructMap.ActionList.Where(item => (item as BaseAction).baseDescribeAction.GetNameAction == "Banana"
-                        && (item as BaseAction).Coordinate == path[0]).SingleOrDefault();
-                        constructMap.ActionList.Remove(bananas);
-                    }
-                    return;
-                }
-                else
-                {
-                    await Task.Delay(1000);
-                    lock (locker)
-                    {
-                        DrawAnimal(path[0], paramether.StartCoordinate, paramether.Animal);
-                        paramether.Path.Add(new Point(path[0].X, path[0].Y));
-                        paramether.searchParameters.UpdateNode(paramether.StartCoordinate.X, paramether.StartCoordinate.Y, true);
-                        paramether.searchParameters.StartLocation = new Point(path[0].X, path[0].Y);
-                    }
+        //            PathFinder pathFinder = new PathFinder(paramether.searchParameters, paramether.Animal);
+        //            path = new List<Point>();
+        //            path = pathFinder.FindPath();
+        //            paramether.searchParameters.UpdateNode(path[0].X, path[0].Y, false);
+        //        }
+        //        if (path.Count == 1)
+        //        {
+        //            await DrawAnimal(path[0], paramether.StartCoordinate, paramether.Animal);
+        //            lock (locker)
+        //            {
+        //                var bananas = constructMap.ActionList.Where(item => (item as BaseAction).baseDescribeAction.GetNameAction == "Banana"
+        //                && (item as BaseAction).Coordinate == path[0]).SingleOrDefault();
+        //                constructMap.ActionList.Remove(bananas);
+        //            }
+        //            return;
+        //        }
+        //        else
+        //        {
+        //            await Task.Delay(1000);
+        //            lock (locker)
+        //            {
+        //                DrawAnimal(path[0], paramether.StartCoordinate, paramether.Animal);
+        //                paramether.Path.Add(new Point(path[0].X, path[0].Y));
+        //                paramether.searchParameters.UpdateNode(paramether.StartCoordinate.X, paramether.StartCoordinate.Y, true);
+        //                paramether.searchParameters.StartLocation = new Point(path[0].X, path[0].Y);
+        //            }
 
-                    await Astar(paramether);
+        //            await Astar(paramether);
 
-                }
-            }, Token, TaskCreationOptions.LongRunning, Context);
-        }
+        //        }
+        //    }, Token, TaskCreationOptions.LongRunning, Context);
+        //}
 
-        public Task DrawAnimal(Point current, Point last, BaseAnimal animal)
-        {
-            int index = 0;
-            index = current.X + (current.Y * 10);
-            return Task.Factory.StartNew(() =>
-           {
-               lock (locker)
-               {
-                   if (Token.IsCancellationRequested)
-                       Token.ThrowIfCancellationRequested();
-                   var indexlast = last.X + (last.Y * 10);
-                   animal.DestroyObject();
-                   animal.pictureBox = PictureControls[index].PictureBox;
-                   return animal;
-               }
-           }, Token, TaskCreationOptions.RunContinuationsAsynchronously, Context).ContinueWith(async t =>
-           {
-               var result = await t;
-               await Task.Yield();
-               result.DrawObject();
-           }, Token, TaskContinuationOptions.AttachedToParent, Context);
-        }
+        //public Task DrawAnimal(Point current, Point last, BaseAnimal animal)
+        //{
+        //    int index = 0;
+        //    index = current.X + (current.Y * 10);
+        //    return Task.Factory.StartNew(() =>
+        //   {
+        //       lock (locker)
+        //       {
+        //           if (Token.IsCancellationRequested)
+        //               Token.ThrowIfCancellationRequested();
+        //           var indexlast = last.X + (last.Y * 10);
+        //           animal.DestroyObject();
+        //           animal.pictureBox = PictureControls[index].PictureBox;
+        //           return animal;
+        //       }
+        //   }, Token, TaskCreationOptions.RunContinuationsAsynchronously, Context).ContinueWith(async t =>
+        //   {
+        //       var result = await t;
+        //       await Task.Yield();
+        //       result.DrawObject();
+        //   }, Token, TaskContinuationOptions.AttachedToParent, Context);
+        //}
 
         #region Waiting
         private void buttonDrawMap_Click(object sender, EventArgs e)
         {
             trackBar1.Value = 0;
             constructMap.ActionList.Clear();
-            MainGroup = new MapComposite();
             list.Clear();
             PictureControls.Clear();
             panelMain.Controls.Clear();
@@ -175,11 +180,12 @@ namespace SplitMap
                 var y = trackBar1.Value / 10;
                 var x = trackBar1.Value % 10;
                 var animal = await constructMap.CreateAnimal(KindAnimal.Monkey, x, y);
-                await (animal as ICanLearnAction).LearningActionAsync(new WalkFieldAction(drawActionMaster).GetType(), "Walk on field");
-                await (animal as ICanLearnAction).LearningActionAsync(new EatBananaAction(drawActionMaster).GetType(), "Eat banana");
-                await (animal as ICanLearnAction).LearningActionAsync(new ProxyClimbToRockAction(drawActionMaster).GetType(), "Proxy climb to rock");
+                await (animal as ICanLearnAction).LearningActionAsync(new WalkFieldAction().GetType(), "Walk on field");
+                await (animal as ICanLearnAction).LearningActionAsync(new EatBananaAction().GetType(), "Eat banana");
+                await (animal as ICanLearnAction).LearningActionAsync(new ProxyClimbToRockAction().GetType(), "Proxy climb to rock");
                 animal.DrawObject();
-                MainGroup.AddComponent(animal);
+                Zoo.Add(animal);
+
             }
             catch (FieldWasBusyException fe)
             {
@@ -208,7 +214,7 @@ namespace SplitMap
         {
             //PictureControls[indexBar].PictureBox.BackColor = PreviosColor;
             indexBar = trackBar1.Value;
-           // PreviosColor = PictureControls[indexBar].PictureBox.BackColor;
+            // PreviosColor = PictureControls[indexBar].PictureBox.BackColor;
             //PictureControls[indexBar].PictureBox.BackColor = Color.SandyBrown;
 
         }
@@ -216,53 +222,33 @@ namespace SplitMap
         private void buttonUp_Click(object sender, EventArgs e)
         {
 
-            foreach (var item in MainGroup.Generator())
+            foreach (var item in Zoo)
             {
-                if (item is BaseAnimal)
-                {
-                    var _item = item as BaseAnimal;
-                    travelExpert.DoStep(_item, PictureControls[_item.IndexBlock], PictureControls, KindStep.Up);
-                }
-
+                item.DoStep(KindStep.Up, PictureControls);
             }
         }
 
         private void buttonDown_Click(object sender, EventArgs e)
         {
-            foreach (var item in MainGroup.Generator())
+            foreach (var item in Zoo)
             {
-                if (item is BaseAnimal)
-                {
-                    var _item = item as BaseAnimal;
-                    travelExpert.DoStep(_item, PictureControls[_item.IndexBlock], PictureControls, KindStep.Down);
-                }
-
+                item.DoStep(KindStep.Down, PictureControls);
             }
         }
 
         private void buttonLeft_Click(object sender, EventArgs e)
         {
-            foreach (var item in MainGroup.Generator())
+            foreach (var item in Zoo)
             {
-                if (item is BaseAnimal)
-                {
-                    var _item = item as BaseAnimal;
-                    travelExpert.DoStep(_item, PictureControls[_item.IndexBlock], PictureControls, KindStep.Left);
-                }
-
+                item.DoStep(KindStep.Left, PictureControls);
             }
         }
 
         private void buttonRight_Click(object sender, EventArgs e)
         {
-            foreach (var item in MainGroup.Generator())
+            foreach (var item in Zoo)
             {
-                if (item is BaseAnimal)
-                {
-                    var _item = item as BaseAnimal;
-                    travelExpert.DoStep(_item, PictureControls[_item.IndexBlock], PictureControls, KindStep.Right);
-                }
-
+                item.DoStep(KindStep.Right, PictureControls);
             }
         }
 
@@ -296,7 +282,7 @@ namespace SplitMap
             var x = trackBar1.Value % 10;
             try
             {
-                switch (RandomAction.Next(0, 0))
+                switch (RandomAction.Next(0, 3))
                 {
                     case 0:
                         {
@@ -329,19 +315,37 @@ namespace SplitMap
 
         }
 
-        private void buttonDrawPath_Click(object sender, EventArgs e)
-        {
-            foreach (var item in Zoo)
-            {
-                var path = travelExpert.GetWay(item);
-                foreach (var step in path)
-                {
-                    PictureControls[step].PictureBox.BackColor = Color.Beige;
-
-                }
-            }
-        }
         #endregion
+
+        private void buttonAddComponent_Click(object sender, EventArgs e)
+        {
+            var y = trackBar1.Value / 10;
+            var x = trackBar1.Value % 10;
+
+
+            var baseAction = new ClimbToRockAction()
+            {
+                pictureBox = PictureControls[x + (y * 10)].PictureBox,
+                baseDescribeAction = BaseDescribeFactory.Instance.GetDescribe(KindAction.Climb)
+            };
+            MainGroup = new ZooComposite(baseAction);
+
+
+
+            var bananabaseAction = new EatBananaAction()
+            {
+                pictureBox = PictureControls[x + (y * 10)].PictureBox,
+                baseDescribeAction = BaseDescribeFactory.Instance.GetDescribe(KindAction.Banana)
+            };
+
+
+
+
+            MainGroup.AddAction(bananabaseAction);
+            MainGroup.AddAction(bananabaseAction);
+            MainGroup.DrawObject();
+
+        }
     }
     public enum KindStep
     {

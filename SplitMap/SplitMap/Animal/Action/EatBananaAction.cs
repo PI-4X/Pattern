@@ -1,4 +1,5 @@
 ﻿using SplitMap.Animal.Base;
+using SplitMap.Animal.BridgeDraw;
 using SplitMap.Animal.Interface;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,10 @@ namespace SplitMap.Animal.Action
 {
     public class EatBananaAction : BaseAction
     {
+        private IDrawMaster drawMaster = new DrawConsole();
         public override BaseDescribeAction baseDescribeAction { get; set; }
-
-        public EatBananaAction(IDrawMaster drawMaster, int _x = 0, int _y = 0, int _size = 45) : base(drawMaster, _x, _y, _size)
+        public EatBananaAction(IDrawMaster _drawMaster, int _size = 45) : base(_size) { drawMaster = _drawMaster; }
+        public EatBananaAction(int _size = 45) : base(_size)
         {
  
         }
@@ -35,13 +37,15 @@ namespace SplitMap.Animal.Action
 
         public override void DrawObject()
         {
-            Coordinate = new Point(pictureBox.Location.Y / 50, pictureBox.Location.X / 50);
-            pictureBox.Image = baseDescribeAction.Sprite;
+            drawMaster.DrawObject(this);
+            //var _graphic = pictureBox.CreateGraphics();
+            //_graphic.DrawImage(baseDescribeAction.Sprite, ExternalCoordinate.X, ExternalCoordinate.Y, SizeBitmap, SizeBitmap);
         }
 
         public override void DestroyObject()
         {
             pictureBox.Image = null;
         }
+        
     }
 }

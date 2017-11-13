@@ -11,12 +11,10 @@ namespace SplitMap.Animal.Adapter
     {
         public override BaseDescribeAction baseDescribeAction { get; set; } = new ArrowDescribeAction();
         public ArrowSign Arrow { get; }
-        public CrossBreeding(IDrawMaster drawMaster,  ArrowSign _arrow) : base(drawMaster)
+        public CrossBreeding(ArrowSign _arrow) : base()
         {
             Arrow = _arrow;
-        }
-       
-
+        }      
         #region Implements IDrawMaster
         public override void DestroyObject()
         {
@@ -32,11 +30,8 @@ namespace SplitMap.Animal.Adapter
             Coordinate = new Point(pictureBox.Location.Y / 50, pictureBox.Location.X / 50);
             pictureBox.Image = new Bitmap(Arrow.GetBitmap, new Size(SizeBitmap, SizeBitmap));
         }
-
-
+       
         #endregion
-
-
         public override async Task<bool> StartActionAsync()
         {
             return await Task.Factory.StartNew(() => true);
